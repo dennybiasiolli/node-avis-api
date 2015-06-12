@@ -14,6 +14,7 @@ $ cd node-avis-api
 $ sudo npm -g install bower
 $ npm install
 $ bower install
+$ npm start
 ```
 
 Finally, open `http://localhost:3000` in your browser.
