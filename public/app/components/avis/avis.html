@@ -1,0 +1,162 @@
+<md-content>
+    <!--<p ng-show="searchKey != null && searchKey != ''">Ricerca per: {{searchKey}}</p>-->
+    <md-tabs md-selected="selectedIndex" md-border-bottom>
+
+        <md-tab label="Ricerca dettagliata" ng-disabled="false">
+            <div layout layout-sm="column">
+                <md-input-container>
+                    <label>Num. Tessera</label>
+                    <input ng-model="filtri.NumTessera">
+                </md-input-container>
+                <md-select placeholder="Stato donatore" ng-model="filtri.StatoDonatore">
+                    <md-option value=""></md-option>
+                    <md-option value="Attivo">Socio Attivo</md-option>
+                    <md-option value="SSO">Socio Sostenitore</md-option>
+                    <md-option value="SEM">Socio Emerito</md-option>
+                </md-select>
+                <!--
+<md-input-container>
+<label>Stato donatore</label>
+<input ng-model="filtri.StatoDonatore">
+</md-input-container>
+-->
+                <md-input-container flex>
+                    <label>Cognome</label>
+                    <input ng-model="filtri.Cognome">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Nome</label>
+                    <input ng-model="filtri.Nome">
+                </md-input-container>
+            </div>
+            <div layout layout-sm="column">
+                <md-select placeholder="Sesso" ng-model="filtri.Sesso">
+                    <md-option value=""></md-option>
+                    <md-option value="M">Maschio</md-option>
+                    <md-option value="F">Femmina</md-option>
+                </md-select>
+                <md-select placeholder="Gruppo" ng-model="filtri.GruppoSanguigno">
+                    <md-option value=""></md-option>
+                    <md-option value="0">Gruppo 0</md-option>
+                    <md-option value="A">Gruppo A</md-option>
+                    <md-option value="B">Gruppo B</md-option>
+                    <md-option value="AB">Gruppo AB</md-option>
+                </md-select>
+                <md-select placeholder="Rh" ng-model="filtri.Rh">
+                    <md-option value=""></md-option>
+                    <md-option value="+">Rh +</md-option>
+                    <md-option value="-">Rh -</md-option>
+                </md-select>
+                <md-input-container flex>
+                    <label>Nato dal</label>
+                    <input type="date" ng-model="filtri.DaDataNascita">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Nato al</label>
+                    <input type="date" ng-model="filtri.ADataNascita">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Iscritto dal</label>
+                    <input type="date" ng-model="filtri.DaDataIscrizione">
+                </md-input-container>
+                <md-input-container flex>
+                    <label>Iscritto al</label>
+                    <input type="date" ng-model="filtri.ADataIscrizione">
+                </md-input-container>
+            </div>
+            <!--
+<div layout layout-sm="column">
+<md-input-container flex>
+<label>CAP uguale a</label>
+<input ng-model="filtri.CapUguale" maxlength="5" md-maxlength="5">
+</md-input-container>
+<md-input-container flex>
+<label>CAP diverso da</label>
+<input ng-model="filtri.CapDiverso" maxlength="5" md-maxlength="5">
+</md-input-container>
+<md-input-container flex>
+<label>Comune</label>
+<input ng-model="filtri.Comune">
+</md-input-container>
+<md-input-container flex>
+<label>Provincia</label>
+<input ng-model="filtri.Provincia" maxlength="2" md-maxlength="2">
+</md-input-container>
+</div>
+-->
+        </md-tab>
+
+        <md-tab label="Ricerca generica" ng-disabled="false">
+            <md-input-container>
+                <label>Ricerca numero tessera o nominativo...</label>
+                <input ng-model="filtri.searchKey">
+            </md-input-container>
+        </md-tab>
+
+    </md-tabs>
+
+    <div>
+        <div ui-grid="gridOptions"></div>
+    </div>
+
+    <!--
+    <div ng-table-pagination="tableParams" template-url="'pager.html'"></div>
+    <div ng-table-pagination="tableParams">
+        <ul class="pagination ng-table-pagination">
+            <li ng-class="{'disabled': !page.active}" ng-repeat="page in pages" ng-switch="page.type">
+                <a ng-switch-when="prev" ng-click="params.page(page.number)" href="">&laquo;</a>
+                <a ng-switch-when="first" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                <a ng-switch-when="page" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                <a ng-switch-when="more" ng-click="params.page(page.number)" href="">&#8230;</a>
+                <a ng-switch-when="last" ng-click="params.page(page.number)" href=""><span ng-bind="page.number"></span></a>
+                <a ng-switch-when="next" ng-click="params.page(page.number)" href="">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+    <p>Page: {{tableParams.page()}}</p>
+    <p>Count per page: {{tableParams.count()}}</p>
+    <p>Total: {{tableParams.total()}}</p>
+    <table ng-table="tableParams" template-pagination="custompager" class="table ng-table-responsive pure-table pure-table-horizontal">
+        <tr ng-repeat="d in $data">
+            <td data-title="'Tess.'" sorting="'number'" sortable="'NumTessera'">
+                <a ng-href="#/avis/donatore/{{d.id}}">{{d.NumTessera}}</a>
+            </td>
+            <td data-title="'Nominativo'" sortable="'Nominativo'">
+                <a ng-href="#/avis/donatore/{{d.id}}">{{d.Cognome}} {{d.Nome}}</a>
+            </td>
+            <td data-title="'S.'" sortable="'Sesso'">{{d.Sesso}}</td>
+            <td data-title="'Nato/a il'" sortable="'DataNascita'">{{d.DataNascita | date:'dd/MM/yyyy'}}</td>
+            <td data-title="'Indirizzo'">{{d.Indirizzo}}<br>{{d.Cap}} {{d.Comune}} {{d.Provincia}}<span ng-if="d.Frazione"> (Fraz.{{d.Frazione}})</span></td>
+            <td data-title="'Contatti'"><span ng-if="d.Telefono">{{d.Telefono}} </span><span ng-if="d.Cellulare"> Cell. {{d.Cellulare}} </span><span ng-if="d.TelefonoLavoro"> Lav. {{d.TelefonoLavoro}} </span><span ng-if="d.Email"><br> <a ng-href="mailto:{{d.Email}}" target="_blank"><md-icon md-svg-icon="assets/img/icons/1432066501_common_email_envelope_mail.svg"></md-icon></a></span></td>
+            <td data-title="'D.Iscr.'" sortable="'DataIscrizione'">{{d.DataIscrizione | date:'dd/MM/yy'}}</td>
+            <td data-title="'Stato'">{{d.StatoDonatore}}</td>
+            <td data-title="'Ult.Don.'" sortable="'UltimaDonazione'">{{d.UltimaDonazione | date:'dd/MM/yy'}}</td>
+            <td data-title="'Ben.'" sortable="'NumBenemerenze'">{{d.NumBenemerenze}}</td>
+            <td data-title="'Donazioni'" sortable="'DonazioniPregresse'">{{d.DonazioniPregresse}} + {{d.DonazioniRegistrate}} = {{d.DonazioniPregresse + d.DonazioniRegistrate}}</td>
+            <td data-title="'Gr/Rh'" sortable="'GruppoSanguigno'">{{d.GruppoSanguigno}} Rh {{d.Rh}}</td>
+        </tr>
+    </table>
+    <script type="text/ng-template" id="custompager">
+        <div class="pager ng-cloak">
+            <span ng-repeat="page in pages"
+                  ng-class="{'disabled': !page.active}" ng-switch="page.type">
+                <span ng-switch-when="prev"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label="">&laquo; Indietro</md-button></span>
+                <span ng-switch-when="first"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label=""><span ng-bind="page.number"></span></md-button></span>
+                <span ng-switch-when="page"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label=""><span ng-bind="page.number"></span></md-button></span>
+                <span ng-switch-when="more"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label="">&#8230;</md-button></span>
+                <span ng-switch-when="last"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label=""><span ng-bind="page.number"></span></md-button></span>
+                <span ng-switch-when="next"><md-button class="md-primary" ng-click="params.page(page.number)" aria-label="">Avanti &raquo;</md-button></span>
+            </span>
+
+            <span class="btn-group">
+                Elementi per pagina
+                <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(5)" class="btn btn-default">5</button>
+                <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+                <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+                <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+                <button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+            </span>
+        </div>
+    </script>
+    -->
+</md-content>
