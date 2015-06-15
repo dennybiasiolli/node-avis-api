@@ -31,6 +31,7 @@ module.exports = function(sequelize, DataTypes) {
         NumBenemerenze: DataTypes.INTEGER,
     }, {
         freezeTableName: true, // Model tableName will be the same as the model name
+        name: { plural: 'Donatori', singular: 'Donatore' }
         //classMethods:{
         //    associate: function(models){
         //        models.Donatore.hasMany(models.Donazioni, { foreignKey: 'Donatore_id'} );

@@ -23,11 +23,11 @@ db.Sezione.hasMany(db.Donatore, {foreignKey: 'Sezione_id'});
 db.Donatore.belongsTo(db.StatoDonatore, {foreignKey: 'StatoDonatore_id'});
 db.StatoDonatore.hasMany(db.Donatore, {foreignKey: 'StatoDonatore_id'});
 
-db.Donatore.hasMany(db.Donazione, {foreignKey: 'Donatore_id'});
 db.Donazione.belongsTo(db.Donatore, {foreignKey: 'Donatore_id'});
+db.Donatore.hasMany(db.Donazione, {foreignKey: 'Donatore_id'});
 
-db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'Donatore_id'});
-db.Donazione.belongsTo(db.TipoDonazione, {foreignKey: 'Donatore_id'});
+db.Donazione.belongsTo(db.TipoDonazione, {foreignKey: 'TipoDonazione_id'});
+db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 
 //Sezione.belongsTo(Donatore);
 //StatoDonatore.belongsTo(Donatore);
@@ -36,7 +36,7 @@ db.Donazione.belongsTo(db.TipoDonazione, {foreignKey: 'Donatore_id'});
 //TipoDonazione.belongsTo(Donazione);
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
-if(false){
+if(true){
     sequelize.sync({force: true}).then(function () {
         // Tables created
         db.Sezione.create({
@@ -49,48 +49,105 @@ if(false){
             Tel: '0172 31527',
             Fax: '0172 31527',
             Email: 'avis.savi@hotmail.it'
-        }).then(function(t1) {
-            console.log(t1.get('id') + ' ' + t1.get('Descrizione'));
-        });
+        }).then(function(sezione) {
+            //console.log(sezione.get('id') + ' ' + sezione.get('Descrizione'));
+            db.StatoDonatore.create({
+                id: 1, Descrizione: 'Attivo', DescrizioneEstesa: 'Attivo', Attivo: true
+            }).then(function(statoDonatore) {
+                //console.log(statoDonatore.get('id') + ' ' + statoDonatore.get('Descrizione'));
+                db.TipoDonazione.create({ Descrizione: 'Sangue' }).then(function(tipoDonazione){
 
-        db.StatoDonatore.create({
-            id: 1, Descrizione: 'Attivo', DescrizioneEstesa: 'Attivo', Attivo: true
-        }).then(function(t1) {
-            console.log(t1.get('id') + ' ' + t1.get('Descrizione'));
-        });
-        db.StatoDonatore.create({
-            id: 2, Descrizione: 'SEM', DescrizioneEstesa: 'Socio Emerito', Attivo: false
-        }).then(function(t1) {
-            console.log(t1.get('id') + ' ' + t1.get('Descrizione'));
-        });
-        db.StatoDonatore.create({
-            id: 3, Descrizione: 'SSO', DescrizioneEstesa: 'Socio Sostenitore', Attivo: false
-        }).then(function(t1) {
-            console.log(t1.get('id') + ' ' + t1.get('Descrizione'));
-        });
+                    console.log(tipoDonazione);
 
 
-        db.Donatore.create({
-            Cognome: 'Biasiolli', Nome: 'Denny'
-        }).then(function(t1) {
-            console.log(t1.get('id') + ' ' + t1.get('Cognome') + ' ' + t1.get('Nome'));
-            db.Donatore.findById(t1.get('id')).then(function(donatore){
-                donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(t2){
-                    db.Donatore.findAll({ include: [ db.Donazione ] }).then(function(donatori) {
-                        console.log(JSON.stringify(donatori));
-                        //console.log((donatori));
+                    sezione.addDonatore(
+                        db.Donatore.build({ Cognome: 'Biasiolli', Nome: 'Denny' })
+                    ).then(function(donatore){
+                        donatore.setStatoDonatore(statoDonatore);
+                        donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(donazione){                        
+                            donazione.setTipoDonazione(tipoDonazione).then(function(dd){
+                                //console.log(donazione);
+                                //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
+                                //    console.log(JSON.stringify(donatori));
+                                //});
+                                db.Sezione.findAll({ 
+                                    include: [{
+                                        model: db.Donatore,
+                                        include: [
+                                            {
+                                                model: db.Donazione,
+                                                include: db.TipoDonazione
+                                            },
+                                            db.StatoDonatore
+                                        ]
+                                    }]
+                                }).then(function(statoDonatore) {
+                                    console.log(JSON.stringify(statoDonatore));
+                                });
+                            });
+                        });
                     });
+
+
                 });
+
+                //db.Donatore.create({
+                //    Cognome: 'Biasiolli', Nome: 'Denny'
+                //}).then(function(donatore) {
+                //    console.log(donatore.get('id') + ' ' + donatore.get('Cognome') + ' ' + donatore.get('Nome'));
+                //    db.Donatore.findById(donatore.get('id')).then(function(donatore){
+                //        //donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(t4){
+                //        //    db.Donatore.findAll({ include: [ db.Donazione ] }).then(function(donatori) {
+                //        //        console.log(JSON.stringify(donatori));
+                //        //    });
+                //        //});
+                //    });
+                //});
+
             });
+            db.StatoDonatore.create({
+                id: 2, Descrizione: 'SEM', DescrizioneEstesa: 'Socio Emerito', Attivo: false
+            }).then(function(statoDonatore) {
+                //console.log(statoDonatore.get('id') + ' ' + statoDonatore.get('Descrizione'));
+            });
+            db.StatoDonatore.create({
+                id: 3, Descrizione: 'SSO', DescrizioneEstesa: 'Socio Sostenitore', Attivo: false
+            }).then(function(statoDonatore) {
+                //console.log(statoDonatore.get('id') + ' ' + statoDonatore.get('Descrizione'));
+            });
+
+            //db.Donatore.create({
+            //    Cognome: 'Rossi', Nome: 'Mario'
+            //}).then(function(donatore) {
+            //    console.log(donatore.get('id') + ' ' + donatore.get('Cognome') + ' ' + donatore.get('Nome'));
+            //    db.Donatore.findById(donatore.get('id')).then(function(donatore){
+            //        donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(t4){
+            //            db.Donatore.findAll({ include: [ db.Donazione ] }).then(function(donatori) {
+            //                console.log(JSON.stringify(donatori));
+            //            });
+            //        });
+            //    });
+            //});
+
         });
+
     });
 }
 else{
-    //Donatore.findAll({ include: [ Donazione ] }).then(function(donatori) {
+    //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
     //    console.log(JSON.stringify(donatori));
-    //    //console.log((donatori));
     //});
-    db.StatoDonatore.findAll({ include: [ db.Donatore ] }).then(function(statoDonatore) {
+    db.Sezione.findAll({ 
+        include: [{
+            model: db.Donatore,
+            include: [
+                {
+                    model: db.Donazione
+                },
+                db.StatoDonatore
+            ]
+        }]
+    }).then(function(statoDonatore) {
         console.log(JSON.stringify(statoDonatore));
     });
 }
