@@ -5,6 +5,7 @@ module.exports = function(sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
+        idOld: DataTypes.INTEGER,
         NumTessera: DataTypes.STRING(5),
         NumTesseraCartacea: DataTypes.STRING(15),
         DataRilascioTessera: DataTypes.DATE,

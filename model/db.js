@@ -36,7 +36,7 @@ db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 //TipoDonazione.belongsTo(Donazione);
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
-if(true){
+if(false){
     sequelize.sync({force: true}).then(function () {
         // Tables created
         db.Sezione.create({
@@ -55,41 +55,39 @@ if(true){
                 id: 1, Descrizione: 'Attivo', DescrizioneEstesa: 'Attivo', Attivo: true
             }).then(function(statoDonatore) {
                 //console.log(statoDonatore.get('id') + ' ' + statoDonatore.get('Descrizione'));
-                db.TipoDonazione.create({ Descrizione: 'Sangue' }).then(function(tipoDonazione){
-
-                    console.log(tipoDonazione);
-
-
-                    sezione.addDonatore(
-                        db.Donatore.build({ Cognome: 'Biasiolli', Nome: 'Denny' })
-                    ).then(function(donatore){
-                        donatore.setStatoDonatore(statoDonatore);
-                        donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(donazione){                        
-                            donazione.setTipoDonazione(tipoDonazione).then(function(dd){
-                                //console.log(donazione);
-                                //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
-                                //    console.log(JSON.stringify(donatori));
-                                //});
-                                db.Sezione.findAll({ 
-                                    include: [{
-                                        model: db.Donatore,
-                                        include: [
-                                            {
-                                                model: db.Donazione,
-                                                include: db.TipoDonazione
-                                            },
-                                            db.StatoDonatore
-                                        ]
-                                    }]
-                                }).then(function(statoDonatore) {
-                                    console.log(JSON.stringify(statoDonatore));
-                                });
-                            });
-                        });
-                    });
-
-
+                db.TipoDonazione.create({ Descrizione: 'Sangue intero' }).then(function(tipoDonazione){
+                    //console.log(tipoDonazione);
+                    //sezione.addDonatore(
+                    //    db.Donatore.build({ Cognome: 'Biasiolli', Nome: 'Denny', Sesso: 'M' })
+                    //).then(function(donatore){
+                    //    donatore.setStatoDonatore(statoDonatore);
+                    //    donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(donazione){                        
+                    //        donazione.setTipoDonazione(tipoDonazione).then(function(dd){
+                    //            //console.log(donazione);
+                    //            //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
+                    //            //    console.log(JSON.stringify(donatori));
+                    //            //});
+                    //            db.Sezione.findAll({ 
+                    //                include: [{
+                    //                    model: db.Donatore,
+                    //                    include: [
+                    //                        {
+                    //                            model: db.Donazione,
+                    //                            include: db.TipoDonazione
+                    //                        },
+                    //                        db.StatoDonatore
+                    //                    ]
+                    //                }]
+                    //            }).then(function(statoDonatore) {
+                    //                console.log(JSON.stringify(statoDonatore));
+                    //            });
+                    //        });
+                    //    });
+                    //});
                 });
+                db.TipoDonazione.create({ Descrizione: 'Plasma' }).then(function(tipoDonazione){});
+                db.TipoDonazione.create({ Descrizione: 'Piastrine' }).then(function(tipoDonazione){});
+                db.TipoDonazione.create({ Descrizione: 'Donazione' }).then(function(tipoDonazione){});
 
                 //db.Donatore.create({
                 //    Cognome: 'Biasiolli', Nome: 'Denny'
@@ -133,23 +131,23 @@ if(true){
 
     });
 }
-else{
-    //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
-    //    console.log(JSON.stringify(donatori));
-    //});
-    db.Sezione.findAll({ 
-        include: [{
-            model: db.Donatore,
-            include: [
-                {
-                    model: db.Donazione
-                },
-                db.StatoDonatore
-            ]
-        }]
-    }).then(function(statoDonatore) {
-        console.log(JSON.stringify(statoDonatore));
-    });
-}
+//else{
+//    //db.Donatore.findAll({ include: [{ model: db.Donazione, as: 'Donazioni' }] }).then(function(donatori) {
+//    //    console.log(JSON.stringify(donatori));
+//    //});
+//    db.Sezione.findAll({ 
+//        include: [{
+//            model: db.Donatore,
+//            include: [
+//                {
+//                    model: db.Donazione
+//                },
+//                db.StatoDonatore
+//            ]
+//        }]
+//    }).then(function(statoDonatore) {
+//        console.log(JSON.stringify(statoDonatore));
+//    });
+//}
 
 module.exports = db;

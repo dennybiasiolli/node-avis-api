@@ -10,7 +10,7 @@ angular.module('myApp.avis')
         var service = {};
         service.getDonatori = function(filtri){
             //return $http.get('app/components/avis/donatori.json', {filtri: filtri});
-            return $http.get('api/donatori', {filtri: filtri});
+            return $http.get('api/donatori', {params: filtri});
         };
         return service;
     }]);
