@@ -11,6 +11,7 @@ var sequelize = new Sequelize('test', 'root', '', {
     }
 });
 
+db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
 db.StatoDonatore = sequelize.import(__dirname + "/StatoDonatore");
 db.TipoDonazione = sequelize.import(__dirname + "/TipoDonazione");
@@ -36,9 +37,23 @@ db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 //TipoDonazione.belongsTo(Donazione);
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
-if(false){
+if(true){
+    sequelize.sync();
+} else {
     sequelize.sync({force: true}).then(function () {
         // Tables created
+        
+        var bcrypt = require('./controllers/bcrypt');
+
+        db.User.findOrCreate({
+            where: {idOld: jsonDonatore.id},
+            defaults: {
+                username: 'denny',
+                password: bcrypt.hashSync('denny'),
+                email: 'denny.biasiolli@gmail.com'
+            }
+        });
+
         db.Sezione.create({
             id: 1,
             Descrizione: 'AVIS SAVIGLIANO',

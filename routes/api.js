@@ -1,5 +1,5 @@
 var express = require('express');
-var ctrl = require('./../controller/controller');
+var ctrl = require('./../controllers/controller');
 var router = express.Router();
 
 /*
@@ -10,6 +10,10 @@ GET       | Read
 PUT       | Update
 DELETE    | Delete
 */
+
+router.get('/', function(req, res){
+    return res.send('Queste sono le API. Bzzzzzzzz!!');
+});
 
 router.get('/donatori', function(req, res) {
     console.log(req.query);
