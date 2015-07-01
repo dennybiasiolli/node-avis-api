@@ -1,5 +1,7 @@
 var express = require('express');
 var ctrl = require('./../controllers/controller');
+var jwt = require('./../controllers/jsonwebtoken');
+var userCtrl = require('./../controllers/users');
 var router = express.Router();
 
 /*
@@ -13,6 +15,20 @@ DELETE    | Delete
 
 router.get('/', function(req, res){
     return res.send('Queste sono le API. Bzzzzzzzz!!');
+});
+
+router.post('/authenticate', function(req, res) {
+    userCtrl.findUser(req.body.username, req.body.password, function(err, data){
+        if(err) {
+            res.json(err);
+        } else {
+            res.json(data);
+        }
+    });
+});
+
+router.get('/me', jwt.isAuthorized, jwt.isTokenValid, function(req, res) {
+    res.json(req.user);
 });
 
 router.get('/donatori', function(req, res) {

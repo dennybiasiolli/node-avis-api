@@ -22,22 +22,4 @@ retObj.compareSync = function(strOriginal, hash){
     return bcrypt.compareSync(strOriginal, hash);
 }
 
-////async
-//bcrypt.hash('denny', null, null, function(err, hash) {
-//    // Store hash in your password DB.
-//    console.log(hash);
-//    bcrypt.compare('denny', hash, function(err, res) {
-//        console.log(res);
-//    });
-//    bcrypt.compare('pippo', hash, function(err, res) {
-//        console.log(res);
-//    });
-//});
-
-////sync
-//var hash = bcrypt.hashSync('denny');
-//console.log(hash);
-//console.log(bcrypt.compareSync('denny', hash)); // true);
-//console.log(bcrypt.compareSync('pippo', hash)); // true);
-
 module.exports = retObj;
