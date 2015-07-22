@@ -15,7 +15,7 @@ jwt.my_decode = function(token){
     return jwt.decode(token);
 };
 
-jwt.isAuthorized = function(req, res, next) {
+function isAuthorized(req, functionOK, functionKO) {
     var bearerToken;
     var bearerHeader = req.headers['authorization'];
     //se non c'è negli headers controllo se mi arriva tramite post
@@ -25,10 +25,22 @@ jwt.isAuthorized = function(req, res, next) {
         var bearer = bearerHeader.split(" ");
         bearerToken = bearer[1];
         req.token = bearerToken;
-        next();
+        functionOK();
     } else {
-        res.sendStatus(403);
+        functionKO();
     }
+}
+
+jwt.isAuthorized = function(req, res, next) {
+    isAuthorized(req, next, function(){
+        res.sendStatus(403);
+    });
+}
+
+jwt.isAuthorizedHTTP = function(req, res, next) {
+    isAuthorized(req, next, function(){
+        res.redirect('/login');
+    });
 }
 
 jwt.isTokenValid = function(req, res, next) {

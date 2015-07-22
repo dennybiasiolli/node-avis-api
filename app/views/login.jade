@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1= title
+    p Login to #{title}
+    if User
+        div.welcomebox
+            // Filtered inline output
+            p.
+                Welcome, #{User.username} &lt;#{User.email}&gt;
+    else
+        div.loginbox
+            form(name="login", action="/login", method="post")
+                label Username
+                br
+                input(type="text", name="username")
+                br
+                br
+                span Password
+                br
+                input(type="password", name="password")
+                br
+                br
+                input(type="submit", value="Login")

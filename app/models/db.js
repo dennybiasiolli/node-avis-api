@@ -1,15 +1,9 @@
 var db = {};
 
+var configDB = require('./../../config/database.js');
+
 var Sequelize = require("sequelize");
-var sequelize = new Sequelize('test', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    }
-});
+var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);
 
 db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
@@ -37,21 +31,18 @@ db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 //TipoDonazione.belongsTo(Donazione);
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
+var bcrypt = require('../controllers/bcrypt');
 if(true){
-    sequelize.sync();
+    sequelize.sync().then(function(){
+        // Tables created
+    });
 } else {
     sequelize.sync({force: true}).then(function () {
         // Tables created
-        
-        var bcrypt = require('./controllers/bcrypt');
-
-        db.User.findOrCreate({
-            where: {idOld: jsonDonatore.id},
-            defaults: {
-                username: 'denny',
-                password: bcrypt.hashSync('denny'),
-                email: 'denny.biasiolli@gmail.com'
-            }
+        db.User.create({
+            username: 'denny',
+            password: db.User.generateHash('denny'), //bcrypt.hashSync('denny'),
+            email: 'denny.biasiolli@gmail.com'
         });
 
         db.Sezione.create({

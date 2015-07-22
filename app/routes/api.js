@@ -31,7 +31,7 @@ router.get('/me', jwt.isAuthorized, jwt.isTokenValid, function(req, res) {
     res.json(req.user);
 });
 
-router.get('/donatori', function(req, res) {
+router.get('/donatori', jwt.isAuthorized, jwt.isTokenValid, function(req, res) {
     console.log(req.query);
     ctrl.getDonatori(req.query, function(err, data){
         if(err)
@@ -41,7 +41,7 @@ router.get('/donatori', function(req, res) {
     //res.sendFile('donatori.json', { root: __dirname + '/../public/app/components/avis/' });
 });
 
-router.post('/donatori', function(req, res){
+router.post('/donatori', jwt.isAuthorized, jwt.isTokenValid, function(req, res){
     ctrl.addDonatori(req.body);
     console.log(req.body);
     res.json(req.body);
@@ -51,7 +51,7 @@ router.get('/test1', function(req, res) {
     res.sendFile('donatori.json', { root: __dirname + '/../public/app/components/avis/' });
 });
 
-router.get('/importDonatoriJSON', function(req, res){
+router.get('/importDonatoriJSON', jwt.isAuthorized, jwt.isTokenValid, function(req, res){
     //leggo il file JSON
     var fs = require('fs');
     fs.readFile(__dirname + '/../public/app/components/avis/donatori.json', 'utf8', function (err, data) {
@@ -63,7 +63,7 @@ router.get('/importDonatoriJSON', function(req, res){
         });
     });
 });
-router.get('/importDonazioniJSON', function(req, res){
+router.get('/importDonazioniJSON', jwt.isAuthorized, jwt.isTokenValid, function(req, res){
     //leggo il file JSON
     var fs = require('fs');
     fs.readFile(__dirname + '/../public/app/components/avis/donazioni.json', 'utf8', function (err, data) {
