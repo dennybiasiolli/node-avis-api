@@ -23,11 +23,12 @@
             <div class="well">
                 <h3><span class="fa fa-user"></span> Local</h3>
 
-                <% if (user.email) { %>
+                <% if (user) { %>
                     <p>
                         <strong>id</strong>: <%= user.id %><br>
+                        <strong>token</strong>: <%= user.getToken() %><br>
                         <strong>email</strong>: <%= user.email %><br>
-                        <!-- <strong>token</strong>: <%= user.token %> -->
+                        <strong>username</strong>: <%= user.username %><br>
                     </p>
                     
                     <a href="/unlink/local" class="btn btn-default">Unlink</a>

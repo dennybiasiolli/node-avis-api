@@ -1,16 +1,25 @@
 var express = require('express');
+var db = require('../models/db');
+
 module.exports = function(passport) {
     var router = express.Router();
 
     // normal routes ===============================================================
 
     // show the home page (will also have our login links)
-    router.get('/', function(req, res) {
-        res.render('index.ejs');
+    router.get('/', function(req, res, next) {
+        if(!req.isAuthenticated()){
+            res.render('index.ejs', {
+                user : req.user
+            });
+        } else {
+            return next();
+        }
     });
 
     // PROFILE SECTION =========================
     router.get('/profile', isLoggedIn, function(req, res) {
+        console.log(req.user);
         res.render('profile.ejs', {
             user : req.user
         });
@@ -150,10 +159,11 @@ module.exports = function(passport) {
 
     // local -----------------------------------
     router.get('/unlink/local', isLoggedIn, function(req, res) {
-        var user            = req.user;
-        user.email    = undefined;
-        user.password = undefined;
-        user.save();
+        //var user            = req.user;
+        //user.password = null;
+        //user.save().then(function(newUser){
+        //    res.redirect('/profile');
+        //});
         res.redirect('/profile');
     });
 
@@ -183,8 +193,6 @@ module.exports = function(passport) {
             res.redirect('/profile');
         });
     });
-
-
 
     return router;
 }

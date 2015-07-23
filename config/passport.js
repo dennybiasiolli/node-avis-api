@@ -3,6 +3,7 @@ var LocalStrategy    = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
+var jwt = require('../app/controllers/jsonwebtoken');
 
 // load up the database model
 var db = require('../app/models/db');
@@ -22,13 +23,16 @@ module.exports = function(passport) {
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
         done(null, user.id);
+        //done(null, userJson);
     });
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        db.User.findById(id).then(function(user){
-            done(null, user.getOggettoClient());
-        }).catch(function(err){
+        db.User.findById(id)
+            .then(function(user){
+            done(null, user)
+        })
+            .catch(function(err){
             done(err, null);
         });
     });
@@ -57,7 +61,7 @@ module.exports = function(passport) {
                     return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
 
                 // all is well, return successful user
-                return done(null, user.getOggettoClient());
+                return done(null, user/*.getOggettoClient()*/);
             })
             .catch(
             function(err){
@@ -93,7 +97,7 @@ module.exports = function(passport) {
                         email: email
                     })
                         .then(function(newUser){
-                        return done(null, newUser.getOggettoClient());
+                        return done(null, newUser/*.getOggettoClient()*/);
                     })
                         .catch(function(err){
                         throw err;

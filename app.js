@@ -27,7 +27,7 @@ if(__DEBUG__){
 }
 else{
     app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.urlencoded({ extended: true }));
 }
 
 // view engine setup
@@ -48,8 +48,10 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 var routes = require('./app/routes/routes')(passport);
-app.use('/', express.static(path.join(__dirname, 'public')));
+
+
 app.use('/', routes);
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 //var jwt = require('./controllers/jsonwebtoken');
 //app.use('/avis', jwt.isAuthorizedHTTP);

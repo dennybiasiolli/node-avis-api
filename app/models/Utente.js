@@ -1,7 +1,5 @@
-
-
 module.exports = function(sequelize, DataTypes) {
-    return sequelize.define('User', {
+    return sequelize.define('Utente', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -12,8 +10,8 @@ module.exports = function(sequelize, DataTypes) {
         email: DataTypes.STRING()
     }, {
         freezeTableName: true, // Model tableName will be the same as the model name
-        tableName: 'Users',
-        name: { plural: 'Users', singular: 'User' },
+        tableName: 'Utenti',
+        name: { plural: 'Utenti', singular: 'Utente' },
         indexes: [
             // Create a unique index on email
             {

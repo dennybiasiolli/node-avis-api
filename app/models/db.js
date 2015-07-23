@@ -5,6 +5,7 @@ var configDB = require('./../../config/database.js');
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);
 
+db.Utente = sequelize.import(__dirname + "/Utente");
 db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
 db.StatoDonatore = sequelize.import(__dirname + "/StatoDonatore");

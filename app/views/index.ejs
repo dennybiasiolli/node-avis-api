@@ -22,6 +22,15 @@
         <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
         <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google+</a>
     </div>
+                <% if (user && user.email) { %>
+                    <p>
+                        <strong>id</strong>: <%= user.id %><br>
+                        <strong>email</strong>: <%= user.email %><br>
+                        <!-- <strong>token</strong>: <%= user.token %> -->
+                    </p>
+                    
+                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                <% } %>
 
     <div class="text-center">
         <p>A demo by <a href="http://scotch.io">Scotch</a>.</p>
