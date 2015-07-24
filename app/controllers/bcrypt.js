@@ -2,14 +2,20 @@ var bcrypt = require('bcrypt-nodejs');
 
 var retObj = {};
 
+var saltRounds = 10;
+
 retObj.hash = function(strOriginal, callback){
-    bcrypt.hash(strOriginal, null, null, function(err, hash) {
-        if(callback)
-            callback(err, hash);
+    bcrypt.genSalt(saltRounds, function(err, salt){
+        if(err && callback) return callback(err, null);
+        bcrypt.hash(strOriginal, salt, null, function(err, hash) {
+            if(callback)
+                callback(err, hash);
+        });
     });
 }
 retObj.hashSync = function(strOriginal){
-    return bcrypt.hashSync(strOriginal);
+    var salt = bcrypt.genSaltSync(saltRounds);
+    return bcrypt.hashSync(strOriginal, salt);
 }
 
 retObj.compare = function(strOriginal, hash, callback){
@@ -20,6 +26,16 @@ retObj.compare = function(strOriginal, hash, callback){
 }
 retObj.compareSync = function(strOriginal, hash){
     return bcrypt.compareSync(strOriginal, hash);
+}
+
+retObj.genSalt = function(rounds, callback){
+    bcrypt.genSalt(rounds, function(err, salt){
+        if(callback)
+            callback(err, salt);
+    });
+}
+retObj.genSaltSync = function(rounds){
+    return bcrypt.genSaltSync(rounds);
 }
 
 module.exports = retObj;

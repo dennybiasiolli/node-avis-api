@@ -58,7 +58,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 //app.use('/avis', jwt.isTokenValid);
 //app.use('/avis', express.static(path.join(__dirname, 'public')));
 
-var api = require('./app/routes')(app);
+var api = require('./app/routes')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

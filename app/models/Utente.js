@@ -1,3 +1,14 @@
+var bcrypt = require('../controllers/bcrypt.js');
+
+function _hashPassword(instance, options, callback) {
+    if(!instance.changed('password')) return callback();
+    bcrypt.hash(instance.password, function(err, hash){
+        if(err) return callback(err);
+        instance.password = hash;
+        callback();
+    });
+}
+
 module.exports = function(sequelize, DataTypes) {
     return sequelize.define('Utente', {
         id: {
@@ -20,18 +31,23 @@ module.exports = function(sequelize, DataTypes) {
             }
         ],
 
-        classMethods: {
-            //Impostare qui di seguito le funzioni generiche per la classe User
-            generateHash: function(password) {
-                var bcrypt = require('bcrypt-nodejs');
-                return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-            }
+        hooks: {
+            beforeUpdate: _hashPassword,
+            beforeCreate: _hashPassword
         },
+
+        //classMethods: {
+        //    //Impostare qui di seguito le funzioni generiche per la classe User
+        //    generateHash: function(password) {
+        //        return bcrypt.hashSync(password);
+        //    }
+        //},
         instanceMethods: {
-            //Impostare qui di seguito le funzioni di istanza per il singolo User
-            validPassword: function(password) {
-                var bcrypt = require('bcrypt-nodejs');
-                return bcrypt.compareSync(password, this.password);
+            verifyPassword: function(password, callback) {
+                bcrypt.compare(password, this.password, function(err, isMatch) {
+                    if (err) return cb(err);
+                    callback(null, isMatch);
+                });
             },
             getToken: function() {
                 var tmp = this.getOggettoClient();

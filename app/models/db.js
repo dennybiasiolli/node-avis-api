@@ -6,6 +6,10 @@ var Sequelize = require("sequelize");
 var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);
 
 db.Utente = sequelize.import(__dirname + "/Utente");
+db.Prova = sequelize.import(__dirname + "/Prova");
+db.Prova.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
+db.Utente.hasMany(db.Prova, {foreignKey: 'Utente_id'});
+
 db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
 db.StatoDonatore = sequelize.import(__dirname + "/StatoDonatore");
