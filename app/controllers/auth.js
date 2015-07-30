@@ -2,6 +2,7 @@
 var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var BearerStrategy = require('passport-http-bearer').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 var db = require('../models/db');
 
 passport.use(new BasicStrategy(
@@ -57,9 +58,32 @@ passport.use(new BearerStrategy(
     }
 ));
 
+passport.use(new LocalStrategy(
+    function(username, password, callback) {
+        db.Utente.findOne({ where: {username: username} })
+            .then(function(utente){
+            // No user found with that username
+            if (!utente) return callback(null, false);
+            // Make sure the password is correct
+            utente.verifyPassword(password, function(err, isMatch) {
+                if (err) return callback(err);
+                // Password did not match
+                if (!isMatch) return callback(null, false);
+                // Success
+                return callback(null, utente);
+            });
+        })
+            .catch(function(err){
+            return callback(err);
+        });
+    }
+));
+
+
 
 //exports.isAuthenticated = passport.authenticate('basic', { session : false });
-exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], { session : false });
+//exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], { session : false });
+exports.isAuthenticated = passport.authenticate(['local', 'bearer'], { session : false });
 
 exports.isClientAuthenticated = passport.authenticate('client-basic', { session : false });
 
