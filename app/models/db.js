@@ -6,9 +6,29 @@ var Sequelize = require("sequelize");
 var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);
 
 db.Utente = sequelize.import(__dirname + "/Utente");
+
 db.Prova = sequelize.import(__dirname + "/Prova");
 db.Prova.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
 db.Utente.hasMany(db.Prova, {foreignKey: 'Utente_id'});
+
+db.Client = sequelize.import(__dirname + "/Client");
+db.Client.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
+db.Utente.hasMany(db.Client, {foreignKey: 'Utente_id'});
+
+db.Code = sequelize.import(__dirname + "/Code");
+db.Code.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
+db.Utente.hasMany(db.Code, {foreignKey: 'Utente_id'});
+db.Code.belongsTo(db.Client, {foreignKey: 'Client_id'});
+db.Client.hasMany(db.Code, {foreignKey: 'Client_id'});
+
+db.Token = sequelize.import(__dirname + "/Token");
+db.Token.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
+db.Utente.hasMany(db.Token, {foreignKey: 'Utente_id'});
+db.Token.belongsTo(db.Client, {foreignKey: 'Client_id'});
+db.Client.hasMany(db.Token, {foreignKey: 'Client_id'});
+
+
+
 
 db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");

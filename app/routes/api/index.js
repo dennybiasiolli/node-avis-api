@@ -67,6 +67,8 @@ DELETE    | Delete
     var donatoriRoute = require('./donatori')(router);
     var utentiRoute = require('./utenti')(router, passport);
     var proveRoute = require('./prove')(router, passport);
+    var clientsRoute = require('./clients')(router, passport);
+    var oauth2Route = require('./oauth2')(router, passport);
 
     return router;
 };

@@ -23,7 +23,7 @@ app.use(cookieParser()); // read cookies (needed for auth)
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 if(__DEBUG__){
     app.use(bodyParser.json({ limit: '5mb' }));
-    app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
+    app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
 }
 else{
     app.use(bodyParser.json());
@@ -35,12 +35,13 @@ app.set('views', path.join(__dirname, 'app/views'));
 app.set('view engine', 'ejs');
 
 
-// required for passport
+// Use express session support since OAuth2orize requires it
 app.use(session({
-    secret: 'ilovescotchscotchyscotchscotch',
-    resave: true,
-    saveUninitialized: true
-})); // session secret
+    secret: 'Super Secret Session Key',
+    saveUninitialized: true,
+    resave: true
+}));
+
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
