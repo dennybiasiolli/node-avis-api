@@ -7,8 +7,9 @@ var db = require('../models/db');
 
 passport.use(new BasicStrategy(
     function(username, password, callback) {
-        db.Utente.findOne({ where: {username: username} })
-            .then(function(utente){
+        db.Utente.findOne({
+            where: {username: username} 
+        }).then(function(utente){
             // No user found with that username
             if (!utente) return callback(null, false);
             // Make sure the password is correct
@@ -19,8 +20,7 @@ passport.use(new BasicStrategy(
                 // Success
                 return callback(null, utente);
             });
-        })
-            .catch(function(err){
+        }).catch(function(err){
             return callback(err);
         });
     }
@@ -28,14 +28,14 @@ passport.use(new BasicStrategy(
 
 passport.use('client-basic', new BasicStrategy(
     function(username, password, callback) {
-        db.Client.findOne({ where: {id: username} })
-            .then(function(client){
+        db.Client.findOne({
+            where: {id: username}
+        }).then(function(client){
             // No client found with that id or bad password
             if (!client || client.secret != password) { return callback(null, false); }
             // Success
             return callback(null, client);
-        })
-            .catch(function(err){
+        }).catch(function(err){
             return callback(err);
         });
     }
@@ -43,16 +43,16 @@ passport.use('client-basic', new BasicStrategy(
 
 passport.use(new BearerStrategy(
     function(accessToken, callback) {
-        db.Token.findOne({ where: {value: accessToken}, include: [db.Utente] })
-            .then(function(token){
+        db.Token.findOne({
+            where: {value: accessToken}, include: [db.Utente]
+        }).then(function(token){
             // No token found
             if(!token) { return callback(null, false); }
             // No user found
             if(!token.Utente) { return callback(null, false); }
             // Simple example with no scope
             callback(null, token.Utente, { scope: '*' });
-        })
-            .catch(function(err){
+        }).catch(function(err){
             return callback(err);
         });
     }
@@ -60,8 +60,9 @@ passport.use(new BearerStrategy(
 
 passport.use(new LocalStrategy(
     function(username, password, callback) {
-        db.Utente.findOne({ where: {username: username} })
-            .then(function(utente){
+        db.Utente.findOne({
+            where: {username: username}
+        }).then(function(utente){
             // No user found with that username
             if (!utente) return callback(null, false);
             // Make sure the password is correct
@@ -72,8 +73,7 @@ passport.use(new LocalStrategy(
                 // Success
                 return callback(null, utente);
             });
-        })
-            .catch(function(err){
+        }).catch(function(err){
             return callback(err);
         });
     }

@@ -12,13 +12,11 @@ server.serializeClient(function(client, callback) {
 
 // Register deserialization function
 server.deserializeClient(function(id, callback) {
-    db.Client.findOne({where: {
-        _id: id
-    }})
-        .then(function(client) {
+    db.Client.findOne({
+        where: { _id: id }
+    }).then(function(client) {
         return callback(null, client);
-    })
-        .catch(function(err){
+    }).catch(function(err){
         return callback(err);
     });
 });
@@ -40,9 +38,10 @@ server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, ca
 
 // Exchange authorization codes for access tokens
 server.exchange(oauth2orize.exchange.code(function(client, code, redirectUri, callback) {
-    db.Code.findOne({where: {
-        value: code
-    }, include: [db.Client, db.Utente]}).then(function(authCode) {
+    db.Code.findOne({
+        where: { value: code },
+        include: [db.Client, db.Utente]
+    }).then(function(authCode) {
         if (!authCode) { return callback(null, false); }
         if (client._id !== authCode.Client._id) { return callback(null, false); }
         if (redirectUri !== authCode.redirectUri) { return callback(null, false); }
@@ -69,9 +68,9 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectUri, ca
 // User authorization endpoint
 exports.authorization = [
     server.authorization(function(clientId, redirectUri, callback) {
-        db.Client.findOne({where: {
-            id: clientId
-        }}).then(function(client) {
+        db.Client.findOne({
+            where: { id: clientId }
+        }).then(function(client) {
             return callback(null, client, redirectUri);
         }).catch(function(err){
             return callback(err);

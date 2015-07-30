@@ -8,25 +8,23 @@ exports.postUtenti = function(req, res) {
             password: req.body.password,
             email: req.body.email
         }
-    })
-        .spread(function(utente, isCreated){
+    }).spread(function(utente, isCreated){
         if(isCreated){
             res.json({status: true, message: 'Utente aggiunto', data: utente});
         } else {
             res.json({status: false, message: 'Utente già esistente', data: null});
         }
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
 
 exports.getUtenti = function(req, res) {
-    db.Utente.findAll(/*{attributes: ['id', 'username', 'email']}*/)
-        .then(function(utenti) {
+    db.Utente.findAll(
+        /*{attributes: ['id', 'username', 'email']}*/
+    ).then(function(utenti) {
         res.json({status: true, data: utenti});
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
@@ -37,14 +35,15 @@ exports.getUtenti = function(req, res) {
 //        attributes: ['id', 'username', 'email']
 //    }).then(function(utente) {
 //        res.json({status: true, data: utente});
-//    })
-//        .catch(function(err){
+//    }).catch(function(err){
 //        res.json({status: false, data: err});
 //    });
 //};
 
 //exports.putUtente = function(req, res){
-//    db.Utente.findById(req.params.id).then(function(utente) {
+//    db.Utente.findById(
+//        req.params.id
+//    ).then(function(utente) {
 //        if(!utente) {
 //            res.json({status: false, message: 'Utente non trovato'});
 //        } else {
@@ -53,8 +52,7 @@ exports.getUtenti = function(req, res) {
 //            utente.save();
 //            res.json({status: true/*, data: utente*/});
 //        }
-//    })
-//        .catch(function(err){
+//    }).catch(function(err){
 //        res.json({status: false, data: err});
 //    });
 //};
@@ -62,11 +60,9 @@ exports.getUtenti = function(req, res) {
 //exports.deleteUtente = function(req, res){
 //    db.Utente.destroy({
 //        where: { id: req.params.id }
-//    })
-//        .then(function(affectedRows){
+//    }).then(function(affectedRows){
 //        res.json({status: true, deletedRows: affectedRows});
-//    })
-//        .catch(function(err){
+//    }).catch(function(err){
 //        res.json({status: false, data: err});
 //    });
 //};

@@ -7,8 +7,7 @@ exports.postProve = function(req, res) {
             descrizione: req.body.descrizione,
             quantita: req.body.quantita
         }
-    })
-        .spread(function(prova, isCreated){
+    }).spread(function(prova, isCreated){
         prova.password = undefined;
         if(isCreated){
             prova.setUtente(req.user.id);
@@ -16,39 +15,41 @@ exports.postProve = function(req, res) {
         } else {
             res.json({status: false, message: 'Prova già esistente', data: prova});
         }
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
 
 exports.getProve = function(req, res) {
-    db.Utente.findById(req.user.id, {include: [db.Prova]})
-        .then(function(utente){
+    db.Utente.findById(
+        req.user.id,
+        {include: [db.Prova]}
+    ).then(function(utente){
         res.json({status: true, data: utente.Prove});
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
 
 exports.getProva = function(req, res) {
-    db.Utente.findById(req.user.id, {include: [{model: db.Prova, where: {id: req.params.id}}]})
-        .then(function(utente){
+    db.Utente.findById(
+        req.user.id,
+        {include: [{model: db.Prova, where: {id: req.params.id}}]}
+    ).then(function(utente){
         console.log(utente);
         res.json({status: true, data: utente.Prove});
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
 
 exports.putProva = function(req, res){
-    db.Prova.findOne({where: {
-        Utente_id: req.user.id,
-        id: req.params.id
-    }})
-        .then(function(prova) {
+    db.Prova.findOne({
+        where: {
+            Utente_id: req.user.id,
+            id: req.params.id
+        }
+    }).then(function(prova) {
         if(!prova) {
             res.json({status: false, message: 'Prova non trovata'});
         } else {
@@ -60,8 +61,7 @@ exports.putProva = function(req, res){
                 res.json({status: true, data: newProva});
             });
         }
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
@@ -72,11 +72,9 @@ exports.deleteProva = function(req, res){
             Utente_id: req.user.id,
             id: req.params.id
         }
-    })
-        .then(function(affectedRows){
+    }).then(function(affectedRows){
         res.json({status: (affectedRows>0), deletedRows: affectedRows});
-    })
-        .catch(function(err){
+    }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
