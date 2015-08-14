@@ -29,7 +29,7 @@ server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, ca
         redirectUri: redirectUri,
     }).then(function(code) {
         code.setClient(client._id);
-        code.setUtente(user.id);
+        code.setUser(user.id);
         callback(null, code.value);
     }).catch(function(err) {
         return callback(err);
@@ -40,7 +40,7 @@ server.grant(oauth2orize.grant.code(function(client, redirectUri, user, ares, ca
 server.exchange(oauth2orize.exchange.code(function(client, code, redirectUri, callback) {
     db.Code.findOne({
         where: { value: code },
-        include: [db.Client, db.Utente]
+        include: [db.Client, db.User]
     }).then(function(authCode) {
         if (!authCode) { return callback(null, false); }
         if (client._id !== authCode.Client._id) { return callback(null, false); }
@@ -52,7 +52,7 @@ server.exchange(oauth2orize.exchange.code(function(client, code, redirectUri, ca
                 value: uid(256)
             }).then(function(token){
                 token.setClient(authCode.Client);
-                token.setUtente(authCode.Utente);
+                token.setUser(authCode.User);
                 callback(null, token);
             }).catch(function(err){
                 return callback(err);

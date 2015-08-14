@@ -10,7 +10,7 @@ exports.postProve = function(req, res) {
     }).spread(function(prova, isCreated){
         prova.password = undefined;
         if(isCreated){
-            prova.setUtente(req.user.id);
+            prova.setUser(req.user.id);
             res.json({status: true, message: 'Prova aggiunta', data: prova});
         } else {
             res.json({status: false, message: 'Prova già esistente', data: prova});
@@ -21,23 +21,23 @@ exports.postProve = function(req, res) {
 };
 
 exports.getProve = function(req, res) {
-    db.Utente.findById(
+    db.User.findById(
         req.user.id,
         {include: [db.Prova]}
-    ).then(function(utente){
-        res.json({status: true, data: utente.Prove});
+    ).then(function(user){
+        res.json({status: true, data: user.Prove});
     }).catch(function(err){
         res.json({status: false, data: err});
     });
 };
 
 exports.getProva = function(req, res) {
-    db.Utente.findById(
+    db.User.findById(
         req.user.id,
         {include: [{model: db.Prova, where: {id: req.params.id}}]}
-    ).then(function(utente){
-        console.log(utente);
-        res.json({status: true, data: utente.Prove});
+    ).then(function(user){
+        console.log(user);
+        res.json({status: true, data: user.Prove});
     }).catch(function(err){
         res.json({status: false, data: err});
     });
@@ -46,7 +46,7 @@ exports.getProva = function(req, res) {
 exports.putProva = function(req, res){
     db.Prova.findOne({
         where: {
-            Utente_id: req.user.id,
+            User_id: req.user.id,
             id: req.params.id
         }
     }).then(function(prova) {
@@ -69,7 +69,7 @@ exports.putProva = function(req, res){
 exports.deleteProva = function(req, res){
     db.Prova.destroy({
         where: {
-            Utente_id: req.user.id,
+            User_id: req.user.id,
             id: req.params.id
         }
     }).then(function(affectedRows){

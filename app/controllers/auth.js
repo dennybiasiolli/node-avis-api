@@ -8,18 +8,18 @@ var db = require('../models');
 passport.use(new BasicStrategy(
     function(username, password, done) {
         console.log('autenticazione BasicStrategy');
-        db.Utente.findOne({
+        db.User.findOne({
             where: {username: username} 
-        }).then(function(utente){
+        }).then(function(user){
             // No user found with that username
-            if (!utente) return done(null, false);
+            if (!user) return done(null, false);
             // Make sure the password is correct
-            utente.verifyPassword(password, function(err, isMatch) {
+            user.verifyPassword(password, function(err, isMatch) {
                 if (err) return done(err);
                 // Password did not match
                 if (!isMatch) return done(null, false);
                 // Success
-                return done(null, utente);
+                return done(null, user);
             });
         }).catch(function(err){
             return done(err);
@@ -47,14 +47,14 @@ passport.use(new BearerStrategy(
     function(accessToken, done) {
         console.log('autenticazione BearerStrategy');
         db.Token.findOne({
-            where: {value: accessToken}, include: [db.Utente]
+            where: {value: accessToken}, include: [db.User]
         }).then(function(token){
             // No token found
             if(!token) { return done(null, false); }
             // No user found
-            if(!token.Utente) { return done(null, false); }
+            if(!token.User) { return done(null, false); }
             // Simple example with no scope
-            return done(null, token.Utente, { scope: '*' });
+            return done(null, token.User, { scope: '*' });
         }).catch(function(err){
             return done(err);
         });
@@ -64,21 +64,21 @@ passport.use(new BearerStrategy(
 passport.use(new LocalStrategy(
     function(username, password, done) {
         console.log('autenticazione local');
-        db.Utente.findOne({
+        db.User.findOne({
             where: {username: username}
-        }).then(function(utente){
+        }).then(function(user){
             // No user found with that username
-            if (!utente) return done(null, false);
+            if(!user) return done(null, false);
 
             // Make sure the password is correct
-            utente.verifyPassword(password, function(err, isMatch) {
-                if (err) return done(err);
+            user.verifyPassword(password, function(err, isMatch) {
+                if(err) return done(err);
 
                 // Password did not match
-                if (!isMatch) return done(null, false);
+                if(!isMatch) return done(null, false);
 
                 // Success
-                return done(null, utente);
+                return done(null, user);
             });
         }).catch(function(err){
             return done(err);
@@ -93,7 +93,7 @@ passport.serializeUser(function(user, done) {
 
 // used to deserialize the user
 passport.deserializeUser(function(id, done) {
-    db.Utente.findById(id).then(function(user){
+    db.User.findById(id).then(function(user){
         return done(null, user);
     }).catch(function(err){
         return done(err, null);

@@ -10,7 +10,7 @@ exports.postClients = function(req, res) {
         }
     }).spread(function(client, isCreated){
         if(isCreated){
-            client.setUtente(req.user.id);
+            client.setUser(req.user.id);
             res.json({status: true, message: 'Client aggiunto.', data: client});
         } else {
             res.json({status: true, message: 'Client già esistente.', data: client});
@@ -21,10 +21,10 @@ exports.postClients = function(req, res) {
 };
 
 exports.getClients = function(req, res) {
-    db.Utente.findById(
+    db.User.findById(
         req.user.id, {include: [db.Client]}
-    ).then(function(utente){
-        res.json(utente.Clients);
+    ).then(function(user){
+        res.json(user.Clients);
     }).catch(function(err){
         res.send(err);
     });

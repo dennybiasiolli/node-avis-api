@@ -5,32 +5,31 @@ var configDB = require('./../../config/database');
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);
 
-db.Utente = sequelize.import(__dirname + "/Utente");
+db.User = sequelize.import(__dirname + "/User");
 
 db.Prova = sequelize.import(__dirname + "/Prova");
-db.Prova.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
-db.Utente.hasMany(db.Prova, {foreignKey: 'Utente_id'});
+db.Prova.belongsTo(db.User, {foreignKey: 'User_id'});
+db.User.hasMany(db.Prova, {foreignKey: 'User_id'});
 
 db.Client = sequelize.import(__dirname + "/Client");
-db.Client.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
-db.Utente.hasMany(db.Client, {foreignKey: 'Utente_id'});
+db.Client.belongsTo(db.User, {foreignKey: 'User_id'});
+db.User.hasMany(db.Client, {foreignKey: 'User_id'});
 
 db.Code = sequelize.import(__dirname + "/Code");
-db.Code.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
-db.Utente.hasMany(db.Code, {foreignKey: 'Utente_id'});
+db.Code.belongsTo(db.User, {foreignKey: 'User_id'});
+db.User.hasMany(db.Code, {foreignKey: 'User_id'});
 db.Code.belongsTo(db.Client, {foreignKey: 'Client_id'});
 db.Client.hasMany(db.Code, {foreignKey: 'Client_id'});
 
 db.Token = sequelize.import(__dirname + "/Token");
-db.Token.belongsTo(db.Utente, {foreignKey: 'Utente_id'});
-db.Utente.hasMany(db.Token, {foreignKey: 'Utente_id'});
+db.Token.belongsTo(db.User, {foreignKey: 'User_id'});
+db.User.hasMany(db.Token, {foreignKey: 'User_id'});
 db.Token.belongsTo(db.Client, {foreignKey: 'Client_id'});
 db.Client.hasMany(db.Token, {foreignKey: 'Client_id'});
 
 
 
 
-//db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
 db.StatoDonatore = sequelize.import(__dirname + "/StatoDonatore");
 db.TipoDonazione = sequelize.import(__dirname + "/TipoDonazione");
@@ -64,36 +63,18 @@ if(false){
 } else {
     sequelize.sync({force: true}).then(function () {
         // Tables created
-        db.Utente.create({
+        db.User.create({
             username: 'denny.biasiolli@gmail.com',
             password: 'denny',
             email: 'denny.biasiolli@gmail.com'
-        }).then(function(utente){
+        }).then(function(user){
             db.Client.create({
                 name: 'Test Client',
                 id: 'this_is_my_id',
                 secret: 'this_is_my_secret',
-                Utente_id: utente.id
+                User_id: user.id
             });
         });
-        db.Utente.create({
-            username: 'antonella.marengo@gmail.com',
-            password: 'anto',
-            email: 'antonella.marengo@gmail.com'
-        }).then(function(utente){
-            db.Client.create({
-                name: 'Test Client',
-                id: 'this_is_my_id',
-                secret: 'this_is_my_secret',
-                Utente_id: utente.id
-            });
-        });
-
-        //db.User.create({
-        //    username: 'denny.biasiolli@gmail.com',
-        //    password: db.User.generateHash('denny'), //bcrypt.hashSync('denny'),
-        //    email: 'denny.biasiolli@gmail.com'
-        //});
 
         db.Sezione.create({
             id: 1,

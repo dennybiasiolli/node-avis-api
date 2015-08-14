@@ -1,7 +1,5 @@
 var express = require('express');
 var ctrl = require('./../../controllers/controller');
-var jwt = require('./../../controllers/jsonwebtoken');
-var userCtrl = require('./../../controllers/users');
 var authController = require('./../../controllers/auth');
 
 var db = require('./../../models');
@@ -22,25 +20,11 @@ DELETE    | Delete
         return res.send('Queste sono le API. Bzzzzzzzz!!');
     });
 
-    router.post('/authenticate', function(req, res) {
-        userCtrl.findUser(req.body.username, req.body.password, function(err, data){
-            if(err) {
-                res.json(err);
-            } else {
-                res.json(data);
-            }
-        });
-    });
-
-    router.get('/me', jwt.isAuthorized, jwt.isTokenValid, function(req, res) {
-        res.json(req.user);
-    });
-
     router.get('/test1', function(req, res) {
         res.sendFile('donatori.json', { root: __dirname + '/../public/app/components/avis/' });
     });
 
-    router.get('/importDonatoriJSON', jwt.isAuthorized, jwt.isTokenValid, function(req, res){
+    router.get('/importDonatoriJSON', authController.isAuthenticated, function(req, res){
         //leggo il file JSON
         var fs = require('fs');
         fs.readFile(__dirname + '/../public/app/components/avis/donatori.json', 'utf8', function (err, data) {
@@ -52,7 +36,7 @@ DELETE    | Delete
             });
         });
     });
-    router.get('/importDonazioniJSON', jwt.isAuthorized, jwt.isTokenValid, function(req, res){
+    router.get('/importDonazioniJSON', authController.isAuthenticated, function(req, res){
         //leggo il file JSON
         var fs = require('fs');
         fs.readFile(__dirname + '/../public/app/components/avis/donazioni.json', 'utf8', function (err, data) {
@@ -66,7 +50,7 @@ DELETE    | Delete
     });
 
     var donatoriRoute = require('./donatori')(router);
-    var utentiRoute = require('./utenti')(router, passport);
+    var usersRoute = require('./users')(router, passport);
     var proveRoute = require('./prove')(router, passport);
     var clientsRoute = require('./clients')(router, passport);
     var oauth2Route = require('./oauth2')(router, passport);
