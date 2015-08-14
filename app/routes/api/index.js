@@ -2,6 +2,7 @@ var express = require('express');
 var ctrl = require('./../../controllers/controller');
 var jwt = require('./../../controllers/jsonwebtoken');
 var userCtrl = require('./../../controllers/users');
+var authController = require('./../../controllers/auth');
 
 var db = require('./../../models');
 
@@ -17,7 +18,7 @@ PUT       | Update
 DELETE    | Delete
 */
 
-    router.get('/', function(req, res){
+    router.get('/', authController.isAuthenticated, function(req, res){
         return res.send('Queste sono le API. Bzzzzzzzz!!');
     });
 

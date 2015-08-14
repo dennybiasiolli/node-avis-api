@@ -30,7 +30,7 @@ db.Client.hasMany(db.Token, {foreignKey: 'Client_id'});
 
 
 
-db.User = sequelize.import(__dirname + "/User");
+//db.User = sequelize.import(__dirname + "/User");
 db.Sezione = sequelize.import(__dirname + "/Sezione");
 db.StatoDonatore = sequelize.import(__dirname + "/StatoDonatore");
 db.TipoDonazione = sequelize.import(__dirname + "/TipoDonazione");
@@ -57,18 +57,43 @@ db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
 var bcrypt = require('../controllers/bcrypt');
-if(true){
+if(false){
     sequelize.sync().then(function(){
         // Tables created
     });
 } else {
     sequelize.sync({force: true}).then(function () {
         // Tables created
-        db.User.create({
-            username: 'denny',
-            password: db.User.generateHash('denny'), //bcrypt.hashSync('denny'),
+        db.Utente.create({
+            username: 'denny.biasiolli@gmail.com',
+            password: 'denny',
             email: 'denny.biasiolli@gmail.com'
+        }).then(function(utente){
+            db.Client.create({
+                name: 'Test Client',
+                id: 'this_is_my_id',
+                secret: 'this_is_my_secret',
+                Utente_id: utente.id
+            });
         });
+        db.Utente.create({
+            username: 'antonella.marengo@gmail.com',
+            password: 'anto',
+            email: 'antonella.marengo@gmail.com'
+        }).then(function(utente){
+            db.Client.create({
+                name: 'Test Client',
+                id: 'this_is_my_id',
+                secret: 'this_is_my_secret',
+                Utente_id: utente.id
+            });
+        });
+
+        //db.User.create({
+        //    username: 'denny.biasiolli@gmail.com',
+        //    password: db.User.generateHash('denny'), //bcrypt.hashSync('denny'),
+        //    email: 'denny.biasiolli@gmail.com'
+        //});
 
         db.Sezione.create({
             id: 1,

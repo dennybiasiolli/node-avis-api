@@ -13,10 +13,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
-
-require('./config/passport')(passport); // pass passport for configuration
-
-
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 // uncomment after placing your favicon in /public
@@ -46,19 +42,15 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-
-var routes = require('./app/routes/routes')(passport);
-
-
-app.use('/', routes);
+var allRoutes = require('./app/routes')(app, passport);
+//var routes = require('./app/routes/routes')(passport);
+//app.use('/', allRoutes);
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 //var jwt = require('./controllers/jsonwebtoken');
 //app.use('/avis', jwt.isAuthorizedHTTP);
 //app.use('/avis', jwt.isTokenValid);
 //app.use('/avis', express.static(path.join(__dirname, 'public')));
-
-var api = require('./app/routes')(app, passport);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
