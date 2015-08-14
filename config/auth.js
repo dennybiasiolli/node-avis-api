@@ -3,7 +3,9 @@
 // expose our config directly to our application using module.exports
 module.exports = {
 
-    'tokenPassword': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9',
+    'tokenPassword' : 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9',
+
+    'sessionKey' : 'Super Secret Session Key',
 
     'facebookAuth' : {
         'clientID'        : 'your-secret-clientID-here', // your App ID

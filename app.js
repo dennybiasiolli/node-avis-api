@@ -13,6 +13,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 
+var myConfig = require('./config/auth');
+
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
 // uncomment after placing your favicon in /public
@@ -33,7 +35,7 @@ app.set('view engine', 'ejs');
 
 // Use express session support since OAuth2orize requires it
 app.use(session({
-    secret: 'Super Secret Session Key',
+    secret: myConfig.sessionKey,
     saveUninitialized: true,
     resave: true
 }));

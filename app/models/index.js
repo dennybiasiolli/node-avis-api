@@ -1,6 +1,6 @@
 var db = {};
 
-var configDB = require('./../../config/database.js');
+var configDB = require('./../../config/database');
 
 var Sequelize = require("sequelize");
 var sequelize = new Sequelize(configDB.database, configDB.username, configDB.password, configDB.options);

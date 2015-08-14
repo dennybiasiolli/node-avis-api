@@ -18,7 +18,7 @@ PUT       | Update
 DELETE    | Delete
 */
 
-    router.get('/', authController.isAuthenticated, function(req, res){
+    router.all('/', authController.isAuthenticated, function(req, res){
         return res.send('Queste sono le API. Bzzzzzzzz!!');
     });
 

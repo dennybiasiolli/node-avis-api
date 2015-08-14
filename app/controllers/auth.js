@@ -6,91 +6,110 @@ var LocalStrategy = require('passport-local').Strategy;
 var db = require('../models');
 
 passport.use(new BasicStrategy(
-    function(username, password, callback) {
+    function(username, password, done) {
         console.log('autenticazione BasicStrategy');
         db.Utente.findOne({
             where: {username: username} 
         }).then(function(utente){
             // No user found with that username
-            if (!utente) return callback(null, false);
+            if (!utente) return done(null, false);
             // Make sure the password is correct
             utente.verifyPassword(password, function(err, isMatch) {
-                if (err) return callback(err);
+                if (err) return done(err);
                 // Password did not match
-                if (!isMatch) return callback(null, false);
+                if (!isMatch) return done(null, false);
                 // Success
-                return callback(null, utente);
+                return done(null, utente);
             });
         }).catch(function(err){
-            return callback(err);
+            return done(err);
         });
     }
 ));
 
 passport.use('client-basic', new BasicStrategy(
-    function(username, password, callback) {
+    function(username, password, done) {
         console.log('autenticazione client-basic');
         db.Client.findOne({
             where: {id: username}
         }).then(function(client){
             // No client found with that id or bad password
-            if (!client || client.secret != password) { return callback(null, false); }
+            if (!client || client.secret != password) { return done(null, false); }
             // Success
-            return callback(null, client);
+            return done(null, client);
         }).catch(function(err){
-            return callback(err);
+            return done(err);
         });
     }
 ));
 
 passport.use(new BearerStrategy(
-    function(accessToken, callback) {
+    function(accessToken, done) {
         console.log('autenticazione BearerStrategy');
         db.Token.findOne({
             where: {value: accessToken}, include: [db.Utente]
         }).then(function(token){
             // No token found
-            if(!token) { return callback(null, false); }
+            if(!token) { return done(null, false); }
             // No user found
-            if(!token.Utente) { return callback(null, false); }
+            if(!token.Utente) { return done(null, false); }
             // Simple example with no scope
-            callback(null, token.Utente, { scope: '*' });
+            return done(null, token.Utente, { scope: '*' });
         }).catch(function(err){
-            return callback(err);
+            return done(err);
         });
     }
 ));
 
 passport.use(new LocalStrategy(
-    function(username, password, callback) {
+    function(username, password, done) {
         console.log('autenticazione local');
         db.Utente.findOne({
             where: {username: username}
         }).then(function(utente){
             // No user found with that username
-            if (!utente) return callback(null, false);
+            if (!utente) return done(null, false);
 
             // Make sure the password is correct
             utente.verifyPassword(password, function(err, isMatch) {
-                if (err) return callback(err);
+                if (err) return done(err);
 
                 // Password did not match
-                if (!isMatch) return callback(null, false);
+                if (!isMatch) return done(null, false);
 
                 // Success
-                return callback(null, utente);
+                return done(null, utente);
             });
         }).catch(function(err){
-            return callback(err);
+            return done(err);
         });
     }
 ));
 
+// used to serialize the user for the session
+passport.serializeUser(function(user, done) {
+    return done(null, user.id);
+});
 
+// used to deserialize the user
+passport.deserializeUser(function(id, done) {
+    db.Utente.findById(id).then(function(user){
+        return done(null, user);
+    }).catch(function(err){
+        return done(err, null);
+    });
+});
+
+
+exports.isLocalAuthenticated = function(req, res, next) {
+    if(req.isAuthenticated())
+        return next();
+    res.redirect('/login');
+}
 
 //exports.isAuthenticated = passport.authenticate('basic', { session : false });
+//exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], { session : false });
 exports.isAuthenticated = passport.authenticate(['basic', 'bearer'], { session : false });
-//exports.isAuthenticated = passport.authenticate(['local', 'bearer'], { session : false });
 //exports.isAuthenticated = passport.authenticate(['basic', 'local', 'bearer'], { session : false });
 
 exports.isClientAuthenticated = passport.authenticate('client-basic', { session : false });

@@ -26,12 +26,11 @@
                 <% if (user) { %>
                     <p>
                         <strong>id</strong>: <%= user.id %><br>
-                        <strong>token</strong>: <%= user.getToken() %><br>
                         <strong>email</strong>: <%= user.email %><br>
                         <strong>username</strong>: <%= user.username %><br>
                     </p>
                     
-                    <a href="/unlink/local" class="btn btn-default">Unlink</a>
+                    <!--<a href="/unlink/local" class="btn btn-default">Unlink</a>-->
                 <% } else { %>
                     <a href="/connect/local" class="btn btn-default">Connect Local</a>
                 <% } %>
