@@ -1,4 +1,4 @@
-var db = require('./../models/db');
+var db = require('./../models');
 var bcrypt = require('./../controllers/bcrypt');
 var jwt = require('./../controllers/jsonwebtoken');
 

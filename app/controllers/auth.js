@@ -3,7 +3,7 @@ var passport = require('passport');
 var BasicStrategy = require('passport-http').BasicStrategy;
 var BearerStrategy = require('passport-http-bearer').Strategy;
 var LocalStrategy = require('passport-local').Strategy;
-var db = require('../models/db');
+var db = require('../models');
 
 passport.use(new BasicStrategy(
     function(username, password, callback) {

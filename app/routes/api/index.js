@@ -3,7 +3,7 @@ var ctrl = require('./../../controllers/controller');
 var jwt = require('./../../controllers/jsonwebtoken');
 var userCtrl = require('./../../controllers/users');
 
-var db = require('./../../models/db');
+var db = require('./../../models');
 
 module.exports = function(passport) {
     var router = express.Router();

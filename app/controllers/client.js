@@ -1,6 +1,4 @@
-var db = require('../models/db');
-
-var db = require('../models/db');
+var db = require('../models');
 
 exports.postClients = function(req, res) {
     db.Client.findOrCreate({

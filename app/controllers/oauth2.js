@@ -1,6 +1,6 @@
 // Load required packages
 var oauth2orize = require('oauth2orize')
-var db = require('../models/db');
+var db = require('../models');
 
 // Create OAuth 2.0 server
 var server = oauth2orize.createServer();

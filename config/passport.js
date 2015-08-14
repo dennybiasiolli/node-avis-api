@@ -6,7 +6,7 @@ var GoogleStrategy   = require('passport-google-oauth').OAuth2Strategy;
 var jwt = require('../app/controllers/jsonwebtoken');
 
 // load up the database model
-var db = require('../app/models/db');
+var db = require('../app/models');
 
 // load the auth variables
 var configAuth = require('./auth'); // use this one for testing

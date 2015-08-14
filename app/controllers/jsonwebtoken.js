@@ -1,14 +1,14 @@
 var jwt = require('jsonwebtoken');
 // https://github.com/auth0/node-jsonwebtoken
 
-var tokenPassword = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9';
+var configAuth = require('./../../config/auth.js');
 
 jwt.my_sign = function(payload){
-    return jwt.sign(payload, tokenPassword, { algorithm: 'HS512' });
+    return jwt.sign(payload, configAuth.tokenPassword, { algorithm: 'HS512' });
 };
 
 jwt.my_verify = function(token){
-    return jwt.verify(token, tokenPassword, { algorithm: 'HS512' });
+    return jwt.verify(token, configAuth.tokenPassword, { algorithm: 'HS512' });
 };
 
 jwt.my_decode = function(token){
@@ -56,7 +56,7 @@ jwt.isTokenValid = function(req, res, next) {
 }
 
 var sample = function(){
-    var token = jwt.sign({ foo: 'bar' }, tokenPassword, { algorithm: 'HS512' });
+    var token = jwt.sign({ foo: 'bar' }, configAuth.tokenPassword, { algorithm: 'HS512' });
     //// sign with RSA SHA256
     //var cert = fs.readFileSync('private.key');  // get private key
     //var token = jwt.sign({ foo: 'bar' }, cert, { algorithm: 'RS256'});

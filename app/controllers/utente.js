@@ -1,4 +1,4 @@
-var db = require('../models/db');
+var db = require('../models');
 
 exports.postUtenti = function(req, res) {
     db.Utente.findOrCreate({

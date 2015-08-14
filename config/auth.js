@@ -3,6 +3,8 @@
 // expose our config directly to our application using module.exports
 module.exports = {
 
+    'tokenPassword': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9',
+
     'facebookAuth' : {
         'clientID'        : 'your-secret-clientID-here', // your App ID
         'clientSecret'    : 'your-client-secret-here', // your App Secret

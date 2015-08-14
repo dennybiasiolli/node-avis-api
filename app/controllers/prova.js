@@ -1,4 +1,3 @@
-var db = require('../models/db');
 
 exports.postProve = function(req, res) {
     db.Prova.findOrCreate({
