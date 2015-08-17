@@ -1,8 +1,9 @@
 var db = require('./../models');
 
-var ctrl = {};
-
-ctrl.getDonatori = function(filtri, callback){
+exports.getDonatori = function(req, res) {
+    //console.log(req.query);
+    var filtri = req.query;
+    //return res.sendFile('donatori.json', { root: __dirname + '/../public/app/components/avis/' });
     delete filtri.NumTessera;
     db.Donatore.findAll({
         include: [ 
@@ -13,27 +14,28 @@ ctrl.getDonatori = function(filtri, callback){
             db.Sezione, db.StatoDonatore ],
         where: filtri
     }).then(function(donatori) {
-        if(callback)
-            return callback(null, donatori);
+        return res.json(donatori);
     }).catch(function(error){
-        if(callback)
-            return callback(error);
+        return res.json(error);
     });
 };
 
-ctrl.addDonatori = function(jsonDonatori, callback){
+exports.postDonatori = function(req, res) {
+    donatoriController.addDonatori(req.body);
+    console.log(req.body);
+    res.json(req.body);
+}
+
+exports.addDonatori = function(jsonDonatori, callback){
     db.Sezione.findAll().then(function(sezioni){
         db.StatoDonatore.findAll().then(function(statiDonatori){
             jsonDonatori.forEach(function(jsonDonatore){
-
                 var objSezione = sezioni.filter(function(obj){
                     return obj.Descrizione === jsonDonatore.Sezione;
                 })[0];
                 var objStatoDonatore = statiDonatori.filter(function(obj){
                     return obj.Descrizione === jsonDonatore.StatoDonatore;
                 })[0];
-
-                //objSezione.addDonatore(
                 db.Donatore.findOrCreate({
                     where: {idOld: jsonDonatore.id},
                     defaults: {
@@ -65,8 +67,7 @@ ctrl.addDonatori = function(jsonDonatori, callback){
                         Sezione_id:             objSezione.id,
                         StatoDonatore_id:       objStatoDonatore.id
                     }
-                })
-                //);
+                });
             });
             if(callback)
                 return callback(null);
@@ -74,7 +75,7 @@ ctrl.addDonatori = function(jsonDonatori, callback){
     });
 };
 
-ctrl.addDonazioni = function(jsonDonazioni, callback){
+exports.addDonazioni = function(jsonDonazioni, callback){
     db.Donatore.findAll().then(function(donatori){
         db.TipoDonazione.findAll().then(function(tipoDonazioni){
             jsonDonazioni.forEach(function(jsonDonazione){
@@ -98,5 +99,3 @@ ctrl.addDonazioni = function(jsonDonazioni, callback){
     if(callback)
         return callback(null);
 };
-
-module.exports = ctrl;

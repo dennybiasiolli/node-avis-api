@@ -151,18 +151,18 @@ if(false){
                 //console.log(statoDonatore.get('id') + ' ' + statoDonatore.get('Descrizione'));
             });
 
-            //db.Donatore.create({
-            //    Cognome: 'Rossi', Nome: 'Mario'
-            //}).then(function(donatore) {
-            //    console.log(donatore.get('id') + ' ' + donatore.get('Cognome') + ' ' + donatore.get('Nome'));
-            //    db.Donatore.findById(donatore.get('id')).then(function(donatore){
-            //        donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(t4){
-            //            db.Donatore.findAll({ include: [ db.Donazione ] }).then(function(donatori) {
-            //                console.log(JSON.stringify(donatori));
-            //            });
-            //        });
-            //    });
-            //});
+            db.Donatore.create({
+                Cognome: 'Rossi', Nome: 'Mario'
+            }).then(function(donatore) {
+                console.log(donatore.get('id') + ' ' + donatore.get('Cognome') + ' ' + donatore.get('Nome'));
+                db.Donatore.findById(donatore.get('id')).then(function(donatore){
+                    donatore.addDonazione(db.Donazione.build({DataDonazione: new Date()})).then(function(t4){
+                        db.Donatore.findAll({ include: [ db.Donazione ] }).then(function(donatori) {
+                            console.log(JSON.stringify(donatori));
+                        });
+                    });
+                });
+            });
 
         });
 

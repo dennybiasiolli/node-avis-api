@@ -7,7 +7,7 @@ var db = require('../models');
 
 passport.use(new BasicStrategy(
     function(username, password, done) {
-        console.log('autenticazione BasicStrategy');
+        //console.log('autenticazione BasicStrategy');
         db.User.findOne({
             where: {username: username} 
         }).then(function(user){
@@ -29,7 +29,7 @@ passport.use(new BasicStrategy(
 
 passport.use('client-basic', new BasicStrategy(
     function(username, password, done) {
-        console.log('autenticazione client-basic');
+        //console.log('autenticazione client-basic');
         db.Client.findOne({
             where: {id: username}
         }).then(function(client){
@@ -45,7 +45,7 @@ passport.use('client-basic', new BasicStrategy(
 
 passport.use(new BearerStrategy(
     function(accessToken, done) {
-        console.log('autenticazione BearerStrategy');
+        //console.log('autenticazione BearerStrategy');
         db.Token.findOne({
             where: {value: accessToken}, include: [db.User]
         }).then(function(token){
@@ -63,7 +63,7 @@ passport.use(new BearerStrategy(
 
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        console.log('autenticazione local');
+        //console.log('autenticazione local');
         db.User.findOne({
             where: {username: username}
         }).then(function(user){
