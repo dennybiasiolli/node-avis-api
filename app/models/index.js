@@ -55,7 +55,6 @@ db.TipoDonazione.hasMany(db.Donazione, {foreignKey: 'TipoDonazione_id'});
 //TipoDonazione.belongsTo(Donazione);
 
 //primo initialize del database, una volta completato commentare queste istruzioni altrimenti lo fa sempre e spiana tutti i dati
-var bcrypt = require('../controllers/bcrypt');
 if(false){
     sequelize.sync().then(function(){
         // Tables created
